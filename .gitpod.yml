@@ -1,0 +1,34 @@
+tasks:
+  - name: Terminal Setup
+    before: echo "alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'" >> /home/gitpod/.bashrc
+  - name: Start Environment
+    command: echo "foo"
+
+
+# List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
+ports:
+  - name: Frontend
+    description: Frontend URL of Magento
+    port: 80
+    onOpen: open-browser
+    visibility: public
+  - name: vite
+    description: Vite
+    port: 5173
+    visibility: private
+    onOpen: ignore
+  - name: no idea
+    description: no idea
+    port: 8000
+    visibility: private
+    onOpen: ignore
+  - name: db
+    description: Database port
+    port: 3306
+    visibility: private
+    onOpen: ignore
+  - name: Redis
+    description: Redis port
+    port: 6379
+    visibility: private
+    onOpen: ignore
