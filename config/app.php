@@ -139,7 +139,7 @@ return [
     */
 
     'maintenance' => [
-        'driver' => 'file',
+        'driver' => 'cache',
         // 'store'  => 'redis',
     ],
 
@@ -194,6 +194,10 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+
+        // custom stuff
+        App\Providers\FortifyServiceProvider::class,
 
     ],
 
