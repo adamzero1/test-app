@@ -15,6 +15,7 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Validation\ValidatesWhenResolvedTrait;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rules\Password;
 
 
 class UserRegister extends FormRequest
@@ -38,14 +39,24 @@ class UserRegister extends FormRequest
     {
         return [
             'user.email' => [
+                'bail',
                 'required',
                 Rule::unique('users', 'email'),
+                'email:rfc,strict,dns,spoof,filter,filter_unicode',
             ],
-            'user.password' => 'required',
-            'user.password_confirmation' => 'required',
-            'user.title' => 'nullable',
-            'user.first_name' => 'nullable',
-            'user.last_name' => 'nullable',
+            'user.password' => [
+                'required',
+                'confirmed',
+                Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
+            ],
+            'user.title' => 'nullable|alpha_dash',
+            'user.first_name' => 'nullable|alpha_dash',
+            'user.last_name' => 'nullable|alpha_dash',
         ];
     }
 
