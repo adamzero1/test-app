@@ -4,12 +4,39 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRegister as UserRegisterRequest;
+use App\Http\Requests\UserLogin as UserLoginRequest;
+use App\Models\User as UserModel;
 
 class User extends Controller
 {
     public function register(UserRegisterRequest $request)
     {
-        return [__METHOD__];
+        /** @var \Illuminate\Support\ValidatedInput $safe */
+        $safeData = $request->safe()->all();
+
+        // TODO create email verification
+
+        return UserModel::create($safeData['user']);
+    }
+
+    public function login(UserLoginRequest $request)
+    {
+        /** @var \Illuminate\Support\ValidatedInput $safe */
+        $safeData = $request->safe()->all();
+
+        // check if email exists
+
+        // check if password is valid
+
+        // check if mfa is valid
+
+        // if not email verified?
+
+        // if not mfa added
+
+        return [
+            'user' => $safeData['user'],
+        ];
     }
 
     /**

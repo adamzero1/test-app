@@ -32,6 +32,8 @@ Route::group([
 
         Route::put('/register', 'register');
 
+        Route::post('/login', 'login');
+
     });
 
     // update user (auth protected)
@@ -46,22 +48,22 @@ Route::group([
 
 
     Route::put('', function(){
-        return ['aa]'];
+        return [__FILE__.':'.__LINE__];
     });
 
     // load specific user (auth protected)
-    Route::get('{id}', function(){
-        return ['aa]'];
+    Route::get('/id/{id}', function(){
+        return [__FILE__.':'.__LINE__];
     });
 
     // update specific user (auth protected)
     Route::patch('{id}', function(){
-        return ['aa]'];
+        return [__FILE__.':'.__LINE__];
     });
 
     // delete specific user (auth protected)
     Route::delete('{id}', function(){
-        return ['aa]'];
+        return [__FILE__.':'.__LINE__];
     });
 
     Route::group([

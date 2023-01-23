@@ -9,7 +9,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rules\Password;
 
 
-class UserRegister extends FormRequest
+class UserLogin extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -32,23 +32,14 @@ class UserRegister extends FormRequest
             'user.email' => [
                 'bail',
                 'required',
-                Rule::unique('users', 'email'),
+                'string',
                 'email:rfc,strict,dns,spoof,filter,filter_unicode',
             ],
             'user.password' => [
                 'required',
-                'confirmed',
-                Password::min(8)
-                    ->letters()
-                    ->mixedCase()
-                    ->numbers()
-                    ->symbols()
-                    ->uncompromised(),
                 'max:255',
+                'string'
             ],
-            'user.title' => 'nullable|alpha_dash|max:10',
-            'user.first_name' => 'required|alpha_dash|max:255',
-            'user.last_name' => 'required|alpha_dash|max:255',
         ];
     }
 

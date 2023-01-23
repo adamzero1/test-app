@@ -13,6 +13,10 @@
 - catch all 404 route!
     //uzer
 - JSON forbidden route
+- add captcha to register route
+- when updating password it needs to have not been used in the last x times
+- catch all error needs to be json (and only shown in dev  mode) try put to a post
+
 
 ### Routes
 - PUT /user/register
