@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UserRegister as UserRegisterRequest;
 use App\Http\Requests\UserLogin as UserLoginRequest;
 use App\Models\User as UserModel;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class User extends Controller
 {
@@ -21,10 +22,19 @@ class User extends Controller
 
     public function login(UserLoginRequest $request)
     {
+        // TODO rate limit
         /** @var \Illuminate\Support\ValidatedInput $safe */
         $safeData = $request->safe()->all();
 
         // check if email exists
+        $user = UserModel::where('email', $safeData['user']['email'])->firstOr(function(){
+            throw new HttpResponseException(response()->json([
+                'message' => 'Inalid authentication details',
+            ]));
+        });
+
+        die('got user');
+
 
         // check if password is valid
 
