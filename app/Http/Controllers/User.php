@@ -7,6 +7,7 @@ use App\Http\Requests\UserRegister as UserRegisterRequest;
 use App\Http\Requests\UserLogin as UserLoginRequest;
 use App\Models\User as UserModel;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Controller
 {
@@ -15,26 +16,41 @@ class User extends Controller
         /** @var \Illuminate\Support\ValidatedInput $safe */
         $safeData = $request->safe()->all();
 
-        // TODO create email verification
+        // TODO create/send email verification
 
+        $safeData['user']['password'] = Hash::make($safeData['user']['password']);
         return UserModel::create($safeData['user']);
     }
 
-    public function login(UserLoginRequest $request)
-    {
+    public function login(
+        UserLoginRequest $request,
+        \Illuminate\Contracts\Auth\Guard $guard
+    ){
         // TODO rate limit
         /** @var \Illuminate\Support\ValidatedInput $safe */
         $safeData = $request->safe()->all();
 
-        // check if email exists
-        $user = UserModel::where('email', $safeData['user']['email'])->firstOr(function(){
+        /** @var \Illuminate\Auth\TokenGuard $guard */
+        /** @var \Illuminate\Auth\EloquentUserProvider $provider */
+        $provider = $guard->getProvider();
+
+        $user = $provider->retrieveByCredentials([
+            'email' => $safeData['user']['email']
+        ]);
+        $valid = false;
+        if($user){
+            echo 'password: '.$safeData['user']['password'].PHP_EOL;
+            $valid = $provider->validateCredentials($user, [
+                'password' => $safeData['user']['password']
+            ]);
+        }
+        if(!$user || !$valid){
             throw new HttpResponseException(response()->json([
-                'message' => 'Inalid authentication details',
+                'message' => 'Invalid authentication details',
             ]));
-        });
-
-        die('got user');
-
+        }
+        
+        die('is valid: '.json_encode($valid));
 
         // check if password is valid
 

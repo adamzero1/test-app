@@ -4,6 +4,7 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        // https://medium.com/@sirajul.anik/laravel-api-authenticate-user-with-custom-driver-different-table-using-auth-middleware-fa2cabec2d61
+        // Auth::extend('nosession', function($app, $name, array $config){});
     }
 }

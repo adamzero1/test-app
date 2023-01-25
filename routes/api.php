@@ -16,7 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return ['version' => 'foo'];
-});
+})->middleware(['throttle:unauthenticated'])
+->withoutMiddleware(['throttle:api']);
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
@@ -29,11 +30,13 @@ Route::group([
 
     // create user
     Route::controller(\App\Http\Controllers\User::class)->group(function(){
+        Route::middleware(['throttle:unauthenticated'])
+            ->withoutMiddleware(['throttle:api'])->group(function(){
 
-        Route::put('/register', 'register');
+            Route::put('/register', 'register');
 
-        Route::post('/login', 'login');
-
+            Route::post('/login', 'login');
+        });
     });
 
     // update user (auth protected)

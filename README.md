@@ -16,7 +16,10 @@
 - add captcha to register route
 - when updating password it needs to have not been used in the last x times
 - catch all error needs to be json (and only shown in dev  mode) try put to a post
-
+- make sure no sessions, ever
+- log rate limit hits
+- rate limit and lockout by email address (vendor/laravel/fortify/src/Actions/EnsureLoginIsNotThrottled.php)
+  vendor/laravel/framework/src/Illuminate/Auth/MustVerifyEmail.php
 
 ### Routes
 - PUT /user/register
