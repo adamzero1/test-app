@@ -49,10 +49,8 @@ class User extends Controller
                 'message' => 'Invalid authentication details',
             ]));
         }
-        
-        die('is valid: '.json_encode($valid));
 
-        // check if password is valid
+        // vendor/laravel/fortify/src/Actions/EnableTwoFactorAuthentication.php
 
         // check if mfa is valid
 
@@ -60,6 +58,7 @@ class User extends Controller
 
         // if not mfa added
 
+        
         return [
             'user' => $safeData['user'],
         ];

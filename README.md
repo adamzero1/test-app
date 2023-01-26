@@ -20,6 +20,8 @@
 - log rate limit hits
 - rate limit and lockout by email address (vendor/laravel/fortify/src/Actions/EnsureLoginIsNotThrottled.php)
   vendor/laravel/framework/src/Illuminate/Auth/MustVerifyEmail.php
+- need to have a look at tinker
+- multi modules
 
 ### Routes
 - PUT /user/register
