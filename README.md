@@ -22,6 +22,7 @@
   vendor/laravel/framework/src/Illuminate/Auth/MustVerifyEmail.php
 - need to have a look at tinker
 - multi modules
+- stop log in token from being able to refresh
 
 ### Routes
 - PUT /user/register

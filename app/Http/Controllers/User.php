@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UserRegister as UserRegisterRequest;
 use App\Http\Requests\UserLogin as UserLoginRequest;
 use App\Models\User as UserModel;
+use Carbon\Carbon;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Controller
 {
@@ -19,7 +22,21 @@ class User extends Controller
         // TODO create/send email verification
 
         $safeData['user']['password'] = Hash::make($safeData['user']['password']);
-        return UserModel::create($safeData['user']);
+        $user = UserModel::create($safeData['user']);
+
+        event(new Registered($user));
+
+        // TODO
+        // $token = $this->guard->login($user);
+
+        /** @var HasApiTokens $user */
+        $accessToken = $user->createToken('login-access-token', ['*'], Carbon::now()->addMinutes(60));
+        $refreshToken = $user->createToken('login-refresh-token', ['refresh'], Carbon::now()->addMinutes(60));
+
+        return [
+            'access_token' => $accessToken,
+            'refresh_token' => $refreshToken,
+        ];
     }
 
     public function login(
