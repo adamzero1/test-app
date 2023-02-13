@@ -17,12 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return ['version' => 'foo'];
 })->middleware(['throttle:unauthenticated'])
-->withoutMiddleware(['throttle:api']);
+->withoutMiddleware(['throttle:api', 'auth:sanctum']);
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-
 
 Route::group([
     'prefix' => '/uzer',
@@ -31,7 +30,7 @@ Route::group([
     // create user
     Route::controller(\App\Http\Controllers\User::class)->group(function(){
         Route::middleware(['throttle:unauthenticated'])
-            ->withoutMiddleware(['throttle:api'])->group(function(){
+            ->withoutMiddleware(['throttle:api', 'auth:sanctum'])->group(function(){
 
             Route::put('/register', 'register');
 

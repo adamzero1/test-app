@@ -31,8 +31,7 @@ class User extends Controller
 
         /** @var HasApiTokens $user */
         $accessToken = $user->createToken('login-access-token', ['*'], Carbon::now()->addMinutes(60));
-        $refreshToken = $user->createToken('login-refresh-token', ['refresh'], Carbon::now()->addMinutes(60));
-
+        $refreshToken = $user->createToken('login-refresh-token', ['refresh'], Carbon::now()->addMinutes(120));
         return [
             'access_token' => $accessToken,
             'refresh_token' => $refreshToken,
@@ -43,6 +42,9 @@ class User extends Controller
         UserLoginRequest $request,
         \Illuminate\Contracts\Auth\Guard $guard
     ){
+        // fairly confident this should all be done in a guard ?
+
+
         // TODO rate limit
         /** @var \Illuminate\Support\ValidatedInput $safe */
         $safeData = $request->safe()->all();
@@ -51,6 +53,7 @@ class User extends Controller
         /** @var \Illuminate\Auth\EloquentUserProvider $provider */
         $provider = $guard->getProvider();
 
+        /** @var \App\Models\User $user */
         $user = $provider->retrieveByCredentials([
             'email' => $safeData['user']['email']
         ]);
@@ -67,6 +70,29 @@ class User extends Controller
             ]));
         }
 
+        // IF has MFA been setup already, check this.
+        // else just plod along
+
+        $accessToken = $user->createToken('login-access-token', ['*'], Carbon::now()->addMinutes(60));
+        $refreshToken = $user->createToken('login-refresh-token', ['refresh'], Carbon::now()->addMinutes(120));
+        return [
+            'access_token' => $accessToken,
+            'refresh_token' => $refreshToken,
+        ];
+
+        // check if email has been verified
+        // should this be AFTER a successful login, like 
+        // on every other route?
+        if(!$user->hasVerifiedEmail()){
+            throw new HttpResponseException(response()->json([
+                'code' => 'email-not-verified',
+                'message' => 'Email has not been verified',
+            ], 400));
+        }
+
+        // check if MFA has been enabled
+
+        // 
         // vendor/laravel/fortify/src/Actions/EnableTwoFactorAuthentication.php
 
         // check if mfa is valid
