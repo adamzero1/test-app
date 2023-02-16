@@ -37,3 +37,7 @@
 - DELETE /user/token/{id}
 
 need to do something with MFA
+
+### Tests to write
+- ensure all requests expect json
+- check unverified email returns an error, with specific code etc...
